@@ -68,7 +68,10 @@ __recovery/
 # moje 
 *.xls
 *.xlsx
+backup/
+lib/
 
 
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
+

@@ -7,20 +7,17 @@ interface
 uses
   Classes, SysUtils;
 
-
-
-
 type
 
-{ TPodatek }
+  { TPodatek }
 
-TPodatek = class
+  TPodatek = class
 
   private
 
   type
-  TPodatekRok= array of string;
-  TPodatki= array of array of string;
+    TPodatekRok = array of string;
+    TPodatki = array of array of string;
 
   const
     GROSZE = 100;
@@ -42,32 +39,32 @@ TPodatek = class
 
       '2022', '3600', '9', '0', '12', '120000', '32');    // kwota obnizajaca podatek
 
-   var
-    fPodatekBiezacy:TPodatekRok;
+  var
+    fPodatekBiezacy: TPodatekRok;
 
-   public
-   constructor Create;
-   destructor Destroy;
-   procedure Clear;
+  public
+    constructor Create;
+    destructor Destroy;
+    procedure Clear;
 
 
-     function ObliczNaleznosciMiesiac(ABrutto, ABruttoRok: currency): currency;
-   class function ObliczPodatkiMiesiac(ABrutto, ABruttoRok: currency): currency;
-   class function ObliczTylkoPodatekMiesiac(ABrutto, ABruttoRok: currency): currency;
-   end;
+    function ObliczNaleznosciMiesiac(ABrutto, ABruttoRok: currency): currency;
+    class function ObliczPodatkiMiesiac(ABrutto, ABruttoRok: currency): currency;
+    class function ObliczTylkoPodatekMiesiac(ABrutto, ABruttoRok: currency): currency;
+  end;
 
 
 
 
 // funkcje pomocnicze
-function RoundTax(Value: Double): Integer;
+function RoundTax(Value: double): integer;
 
 
 implementation
 
 
 
-function RoundTax(Value: Double): Integer; //zaokrągla zgodnie z regułą podatkową
+function RoundTax(Value: double): integer; //zaokrągla zgodnie z regułą podatkową
 begin
   if Frac(Value) = 0.5 then
     Result := Trunc(Value) + 1
@@ -78,36 +75,35 @@ end;
 
 
 
-
 { TPodatek }
 
 constructor TPodatek.Create;
 begin
-  fPodatekBiezacy:= PODATEK_TABELA;
+  fPodatekBiezacy := PODATEK_TABELA;
 end;
 
 destructor TPodatek.Destroy;
 begin
- fPodatekBiezacy:=nil;
+  fPodatekBiezacy := nil;
 end;
 
 procedure TPodatek.Clear;
 begin
-//  czyszczenie zawartosci
+  //  czyszczenie zawartosci
 end;
 
 function TPodatek.ObliczNaleznosciMiesiac(ABrutto, ABruttoRok: currency): currency;
 var
- // test: currency;
+  // test: currency;
   pierwszyProgProcent, drugiProgProcent: currency;
   kwotaProgu, podstawaOpodatkowania, kwotaNaleznosci, kwotaWolna,
   kwotaProguMiesiac, skladkaZdrowotnaOdliczalna, skladkaZdrowotna: currency;
 
 begin
-   //czyszczenie zmiennych
-   skladkaZdrowotnaOdliczalna :=0;
-   skladkaZdrowotna:=0;
-   kwotaNaleznosci:=0;
+  //czyszczenie zmiennych
+  skladkaZdrowotnaOdliczalna := 0;
+  skladkaZdrowotna := 0;
+  kwotaNaleznosci := 0;
 
   // Przypisanie wartości z tabeli podatków
   kwotaWolna := StrToCurr(fPodatekBiezacy[KOLUMNA_KWOTA_WOLNA]);
@@ -118,7 +114,8 @@ begin
 
   // Składki zdrowotne
   skladkaZdrowotna := RoundTax(ABrutto *
-    StrToCurr(fPodatekBiezacy[KOLUMNA_ZDROWOTNA])) / GROSZE;  //dla w32 Round raokragla zle
+    StrToCurr(fPodatekBiezacy[KOLUMNA_ZDROWOTNA])) / GROSZE;
+  //dla w32 Round raokragla zle
 
 
   skladkaZdrowotnaOdliczalna :=
@@ -157,20 +154,19 @@ begin
 
 end;
 
-class function TPodatek.ObliczPodatkiMiesiac(ABrutto, ABruttoRok: currency
-  ): currency;
+class function TPodatek.ObliczPodatkiMiesiac(ABrutto, ABruttoRok: currency): currency;
 var
- // test: currency;
+  // test: currency;
   pierwszyProgProcent, drugiProgProcent: currency;
   kwotaProgu, podstawaOpodatkowania, kwotaNaleznosci, kwotaWolna,
   kwotaProguMiesiac, skladkaZdrowotnaOdliczalna, skladkaZdrowotna: currency;
-  podatekBiezacy:TPodatekRok;
+  podatekBiezacy: TPodatekRok;
 begin
-   //czyszczenie zmiennych
-   skladkaZdrowotnaOdliczalna :=0;
-   skladkaZdrowotna:=0;
-   kwotaNaleznosci:=0;
-   podatekBiezacy:=PODATEK_TABELA;
+  //czyszczenie zmiennych
+  skladkaZdrowotnaOdliczalna := 0;
+  skladkaZdrowotna := 0;
+  kwotaNaleznosci := 0;
+  podatekBiezacy := PODATEK_TABELA;
 
 
   // Przypisanie wartości z tabeli podatków
@@ -182,7 +178,8 @@ begin
 
   // Składki zdrowotne
   skladkaZdrowotna := RoundTax(ABrutto *
-    StrToCurr(podatekBiezacy[KOLUMNA_ZDROWOTNA])) / GROSZE;  //dla w32 Round raokragla zle
+    StrToCurr(podatekBiezacy[KOLUMNA_ZDROWOTNA])) / GROSZE;
+  //dla w32 Round raokragla zle
 
 
   skladkaZdrowotnaOdliczalna :=
@@ -219,21 +216,20 @@ begin
   Result := kwotaNaleznosci;
   //Result := Round(kwotaNaleznosci);
 
-
 end;
 
-class function TPodatek.ObliczTylkoPodatekMiesiac(ABrutto, ABruttoRok: currency
-  ): currency;
+class function TPodatek.ObliczTylkoPodatekMiesiac(ABrutto, ABruttoRok:
+  currency): currency;
 var
- // test: currency;
+  // test: currency;
   pierwszyProgProcent, drugiProgProcent: currency;
   kwotaProgu, podstawaOpodatkowania, kwotaNaleznosci, kwotaWolna,
-  kwotaProguMiesiac  : currency;
-  podatekBiezacy:TPodatekRok;
+  kwotaProguMiesiac: currency;
+  podatekBiezacy: TPodatekRok;
 begin
-   //czyszczenie zmiennych
-   kwotaNaleznosci:=0;
-   podatekBiezacy:=PODATEK_TABELA;
+  //czyszczenie zmiennych
+  kwotaNaleznosci := 0;
+  podatekBiezacy := PODATEK_TABELA;
 
 
   // Przypisanie wartości z tabeli podatków
@@ -273,4 +269,3 @@ end;
 
 
 end.
-

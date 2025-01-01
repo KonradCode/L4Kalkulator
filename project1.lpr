@@ -12,11 +12,12 @@ uses
   Forms,
   OknoGlowne,
   podatek,
-  L4 { you can add units after this };
+  L4, wersja;
 
 {$R *.res}
 
 begin
+
   RequireDerivedFormResource := True;
   Application.Title:='L4Kalkulator';
   Application.Scaled:=True;

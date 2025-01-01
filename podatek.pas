@@ -30,8 +30,8 @@ type
     KOLUMNA_PODATEK_PROG_1 = 4;
     KOLUMNA_PROG_KWOTA = 5;
     KOLUMNA_PODATEK_PROG_2 = 6;
-    PODATEK_ROK_START = 0;
-    PODATEK_ROK_STOP = 6;
+ //   PODATEK_ROK_START = 0;
+ //   PODATEK_ROK_STOP = 6;
 
     PODATEK_TABELA: TPodatekRok = (
       //Rok | Kwota zmniejszajaca podatek | Składka | Składka |  Stawka 1 | Próg 2  | Stawka 2
@@ -43,14 +43,25 @@ type
     fPodatekBiezacy: TPodatekRok;
 
   public
-    constructor Create;
-    destructor Destroy;
-    procedure Clear;
+
+  constructor Create;
+  destructor Destroy;override;
+  procedure Clear;
 
 
     function ObliczNaleznosciMiesiac(ABrutto, ABruttoRok: currency): currency;
+
+    // metody statyczne do pracy bez tworzenia obiektów
     class function ObliczPodatkiMiesiac(ABrutto, ABruttoRok: currency): currency;
+    class function ObliczPodatki1ProgMiesiac(ABrutto: currency): currency;
+    class function ObliczPodatki2ProgMiesiac(ABrutto: currency): currency;
+
     class function ObliczTylkoPodatekMiesiac(ABrutto, ABruttoRok: currency): currency;
+    class function ObliczTylkoPodatek1ProgMiesiac(ABrutto: currency): currency;
+    class function ObliczTylkoPodatek2ProgMiesiac(ABrutto: currency): currency;
+
+    // metody statyczne do pracy bez dostepu do danych klasy
+    class function ZaokraglijPodatek(Value: double): integer;static;
   end;
 
 
@@ -79,12 +90,14 @@ end;
 
 constructor TPodatek.Create;
 begin
+  inherited;
   fPodatekBiezacy := PODATEK_TABELA;
 end;
 
 destructor TPodatek.Destroy;
 begin
   fPodatekBiezacy := nil;
+  inherited;
 end;
 
 procedure TPodatek.Clear;
@@ -113,29 +126,29 @@ begin
 
 
   // Składki zdrowotne
-  skladkaZdrowotna := RoundTax(ABrutto *
+  skladkaZdrowotna := ZaokraglijPodatek(ABrutto *
     StrToCurr(fPodatekBiezacy[KOLUMNA_ZDROWOTNA])) / GROSZE;
   //dla w32 Round raokragla zle
 
 
   skladkaZdrowotnaOdliczalna :=
-    RoundTax(ABrutto * StrToCurr(fPodatekBiezacy[KOLUMNA_ZDROWOTNA_ODLICZNA])) / GROSZE;
+    ZaokraglijPodatek(ABrutto * StrToCurr(fPodatekBiezacy[KOLUMNA_ZDROWOTNA_ODLICZNA])) / GROSZE;
 
   // Przeliczenie kwoty wolnej na miesiące
   kwotaWolna := kwotaWolna / MIESIECY_W_ROKU;
 
   // Obliczamy podstawę opodatkowania
-  podstawaOpodatkowania := RoundTax(ABrutto);
+  podstawaOpodatkowania := ZaokraglijPodatek(ABrutto);
 
   // Obliczamy próg dla jednego miesiąca
   kwotaProguMiesiac := kwotaProgu / MIESIECY_W_ROKU;
 
   // Obliczenia zależne od progu dochodowego
   if ABruttoRok <= kwotaProgu then
-    kwotaNaleznosci := RoundTax((podstawaOpodatkowania * pierwszyProgProcent) /
+    kwotaNaleznosci := ZaokraglijPodatek((podstawaOpodatkowania * pierwszyProgProcent) /
       GROSZE - kwotaWolna)
   else
-    kwotaNaleznosci := RoundTax(((kwotaProguMiesiac * pierwszyProgProcent) / GROSZE) +
+    kwotaNaleznosci := ZaokraglijPodatek(((kwotaProguMiesiac * pierwszyProgProcent) / GROSZE) +
       ((podstawaOpodatkowania - kwotaProguMiesiac) * drugiProgProcent) /
       GROSZE - kwotaWolna);
 
@@ -177,29 +190,29 @@ begin
 
 
   // Składki zdrowotne
-  skladkaZdrowotna := RoundTax(ABrutto *
+  skladkaZdrowotna := ZaokraglijPodatek(ABrutto *
     StrToCurr(podatekBiezacy[KOLUMNA_ZDROWOTNA])) / GROSZE;
   //dla w32 Round raokragla zle
 
 
   skladkaZdrowotnaOdliczalna :=
-    RoundTax(ABrutto * StrToCurr(podatekBiezacy[KOLUMNA_ZDROWOTNA_ODLICZNA])) / GROSZE;
+    ZaokraglijPodatek(ABrutto * StrToCurr(podatekBiezacy[KOLUMNA_ZDROWOTNA_ODLICZNA])) / GROSZE;
 
   // Przeliczenie kwoty wolnej na miesiące
   kwotaWolna := kwotaWolna / MIESIECY_W_ROKU;
 
   // Obliczamy podstawę opodatkowania
-  podstawaOpodatkowania := RoundTax(ABrutto);
+  podstawaOpodatkowania := ZaokraglijPodatek(ABrutto);
 
   // Obliczamy próg dla jednego miesiąca
   kwotaProguMiesiac := kwotaProgu / MIESIECY_W_ROKU;
 
   // Obliczenia zależne od progu dochodowego
   if ABruttoRok <= kwotaProgu then
-    kwotaNaleznosci := RoundTax((podstawaOpodatkowania * pierwszyProgProcent) /
+    kwotaNaleznosci := ZaokraglijPodatek((podstawaOpodatkowania * pierwszyProgProcent) /
       GROSZE - kwotaWolna)
   else
-    kwotaNaleznosci := RoundTax(((kwotaProguMiesiac * pierwszyProgProcent) / GROSZE) +
+    kwotaNaleznosci := ZaokraglijPodatek(((kwotaProguMiesiac * pierwszyProgProcent) / GROSZE) +
       ((podstawaOpodatkowania - kwotaProguMiesiac) * drugiProgProcent) /
       GROSZE - kwotaWolna);
 
@@ -215,6 +228,116 @@ begin
 
   Result := kwotaNaleznosci;
   //Result := Round(kwotaNaleznosci);
+
+end;
+
+class function TPodatek.ObliczPodatki1ProgMiesiac(ABrutto: currency): currency;
+var
+  // test: currency;
+  pierwszyProgProcent: currency;
+  podstawaOpodatkowania, kwotaNaleznosci, kwotaWolna,
+  kwotaProguMiesiac, skladkaZdrowotna,skladkaZdrowotnaOdliczalna: currency;
+  podatekBiezacy: TPodatekRok;
+begin
+  //czyszczenie zmiennych
+  skladkaZdrowotna := 0;
+  skladkaZdrowotnaOdliczalna := 0;
+  kwotaNaleznosci := 0;
+  podatekBiezacy := PODATEK_TABELA;
+
+
+  // Przypisanie wartości z tabeli podatków
+  kwotaWolna := StrToCurr(podatekBiezacy[KOLUMNA_KWOTA_WOLNA]);
+  pierwszyProgProcent := StrToCurr(podatekBiezacy[KOLUMNA_PODATEK_PROG_1]);
+
+
+  // Składki zdrowotne
+  skladkaZdrowotna := ZaokraglijPodatek(ABrutto *
+    StrToCurr(podatekBiezacy[KOLUMNA_ZDROWOTNA])) / GROSZE;
+  //dla w32 Round raokragla zle
+
+
+  skladkaZdrowotnaOdliczalna :=
+    ZaokraglijPodatek(ABrutto * StrToCurr(podatekBiezacy[KOLUMNA_ZDROWOTNA_ODLICZNA])) / GROSZE;
+
+  // Przeliczenie kwoty wolnej na miesiące
+  kwotaWolna := kwotaWolna / MIESIECY_W_ROKU;
+
+  // Obliczamy podstawę opodatkowania
+  podstawaOpodatkowania := ZaokraglijPodatek(ABrutto);
+
+  // Obliczenia zależne od progu dochodowego
+
+   kwotaNaleznosci := ZaokraglijPodatek((podstawaOpodatkowania * pierwszyProgProcent) /
+      GROSZE - kwotaWolna);
+
+  // Korekta należności o składkę zdrowotną (odliczalna)
+  kwotaNaleznosci := kwotaNaleznosci - skladkaZdrowotnaOdliczalna;
+
+  // Dodanie składki zdrowotnej (nieodliczalna)
+  kwotaNaleznosci := kwotaNaleznosci + skladkaZdrowotna;
+
+  // Podatek nie może być ujemny
+  if kwotaNaleznosci < 0 then
+    kwotaNaleznosci := 0;
+
+  Result := kwotaNaleznosci;
+
+end;
+
+class function TPodatek.ObliczPodatki2ProgMiesiac(ABrutto: currency): currency;
+var
+  // test: currency;
+  drugiProgProcent: currency;
+  podstawaOpodatkowania, kwotaNaleznosci, kwotaWolna,
+  kwotaProguMiesiac, skladkaZdrowotna,skladkaZdrowotnaOdliczalna: currency;
+  podatekBiezacy: TPodatekRok;
+begin
+  //czyszczenie zmiennych
+  skladkaZdrowotna := 0;
+  skladkaZdrowotnaOdliczalna := 0;
+  kwotaNaleznosci := 0;
+  podatekBiezacy := PODATEK_TABELA;
+
+
+  // Przypisanie wartości z tabeli podatków
+  kwotaWolna := StrToCurr(podatekBiezacy[KOLUMNA_KWOTA_WOLNA]);
+  drugiProgProcent := StrToCurr(podatekBiezacy[KOLUMNA_PODATEK_PROG_2]);
+
+
+  // Składki zdrowotne
+  skladkaZdrowotna := ZaokraglijPodatek(ABrutto *
+    StrToCurr(podatekBiezacy[KOLUMNA_ZDROWOTNA])) / GROSZE;
+  //dla w32 Round raokragla zle
+
+
+  skladkaZdrowotnaOdliczalna :=
+    ZaokraglijPodatek(ABrutto * StrToCurr(podatekBiezacy[KOLUMNA_ZDROWOTNA_ODLICZNA])) / GROSZE;
+
+  // Przeliczenie kwoty wolnej na miesiące
+  kwotaWolna := kwotaWolna / MIESIECY_W_ROKU;
+
+  // Obliczamy podstawę opodatkowania
+  podstawaOpodatkowania := ZaokraglijPodatek(ABrutto);
+
+  // Obliczenia zależne od progu dochodowego
+
+
+
+   kwotaNaleznosci := ZaokraglijPodatek( (podstawaOpodatkowania  * drugiProgProcent) /
+      GROSZE - kwotaWolna);
+
+  // Korekta należności o składkę zdrowotną (odliczalna)
+  kwotaNaleznosci := kwotaNaleznosci - skladkaZdrowotnaOdliczalna;
+
+  // Dodanie składki zdrowotnej (nieodliczalna)
+  kwotaNaleznosci := kwotaNaleznosci + skladkaZdrowotna;
+
+  // Podatek nie może być ujemny
+  if kwotaNaleznosci < 0 then
+    kwotaNaleznosci := 0;
+
+  Result := kwotaNaleznosci;
 
 end;
 
@@ -244,17 +367,17 @@ begin
   kwotaWolna := kwotaWolna / MIESIECY_W_ROKU;
 
   // Obliczamy podstawę opodatkowania
-  podstawaOpodatkowania := RoundTax(ABrutto);
+  podstawaOpodatkowania := ZaokraglijPodatek(ABrutto);
 
   // Obliczamy próg dla jednego miesiąca
   kwotaProguMiesiac := kwotaProgu / MIESIECY_W_ROKU;
 
   // Obliczenia zależne od progu dochodowego
   if ABruttoRok <= kwotaProgu then
-    kwotaNaleznosci := RoundTax((podstawaOpodatkowania * pierwszyProgProcent) /
+    kwotaNaleznosci := ZaokraglijPodatek((podstawaOpodatkowania * pierwszyProgProcent) /
       GROSZE - kwotaWolna)
   else
-    kwotaNaleznosci := RoundTax(((kwotaProguMiesiac * pierwszyProgProcent) / GROSZE) +
+    kwotaNaleznosci := ZaokraglijPodatek(((kwotaProguMiesiac * pierwszyProgProcent) / GROSZE) +
       ((podstawaOpodatkowania - kwotaProguMiesiac) * drugiProgProcent) /
       GROSZE - kwotaWolna);
 
@@ -265,6 +388,92 @@ begin
   Result := kwotaNaleznosci;
   //Result := Round(kwotaNaleznosci);
 
+end;
+
+class function TPodatek.ObliczTylkoPodatek1ProgMiesiac(ABrutto: currency
+  ): currency;
+var
+  // test: currency;
+  pierwszyProgProcent, drugiProgProcent: currency;
+  kwotaProgu, podstawaOpodatkowania, kwotaNaleznosci, kwotaWolna: currency;
+  podatekBiezacy: TPodatekRok;
+begin
+  //czyszczenie zmiennych
+  kwotaNaleznosci := 0;
+  podatekBiezacy := PODATEK_TABELA;
+
+
+  // Przypisanie wartości z tabeli podatków
+  kwotaWolna := StrToCurr(podatekBiezacy[KOLUMNA_KWOTA_WOLNA]);
+  pierwszyProgProcent := StrToCurr(podatekBiezacy[KOLUMNA_PODATEK_PROG_1]);
+
+
+
+  // Przeliczenie kwoty wolnej na miesiące
+  kwotaWolna := kwotaWolna / MIESIECY_W_ROKU;
+
+  // Obliczamy podstawę opodatkowania
+  podstawaOpodatkowania := ZaokraglijPodatek(ABrutto);
+
+
+    kwotaNaleznosci := ZaokraglijPodatek((podstawaOpodatkowania * pierwszyProgProcent) /
+      GROSZE - kwotaWolna) ;
+
+
+  // Podatek nie może być ujemny
+  if kwotaNaleznosci < 0 then
+    kwotaNaleznosci := 0;
+
+  Result := kwotaNaleznosci;
+  //Result := Round(kwotaNaleznosci);
+
+end;
+
+class function TPodatek.ObliczTylkoPodatek2ProgMiesiac(ABrutto: currency
+  ): currency;
+var
+  // test: currency;
+  drugiProgProcent: currency;
+  kwotaProgu, podstawaOpodatkowania, kwotaNaleznosci, kwotaWolna: currency;
+  podatekBiezacy: TPodatekRok;
+begin
+  //czyszczenie zmiennych
+  kwotaNaleznosci := 0;
+  podatekBiezacy := PODATEK_TABELA;
+
+
+  // Przypisanie wartości z tabeli podatków
+  kwotaWolna := StrToCurr(podatekBiezacy[KOLUMNA_KWOTA_WOLNA]);
+  drugiProgProcent := StrToCurr(podatekBiezacy[KOLUMNA_PODATEK_PROG_2]);
+
+
+
+  // Przeliczenie kwoty wolnej na miesiące
+  kwotaWolna := kwotaWolna / MIESIECY_W_ROKU;
+
+  // Obliczamy podstawę opodatkowania
+  podstawaOpodatkowania := ZaokraglijPodatek(ABrutto);
+
+
+    kwotaNaleznosci := ZaokraglijPodatek((podstawaOpodatkowania * drugiProgProcent) /
+      GROSZE - kwotaWolna);
+
+
+  // Podatek nie może być ujemny
+  if kwotaNaleznosci < 0 then
+    kwotaNaleznosci := 0;
+
+  Result := kwotaNaleznosci;
+  //Result := Round(kwotaNaleznosci);
+
+end;
+
+class function TPodatek.ZaokraglijPodatek(Value: double): integer;
+begin
+  if Frac(Value) = 0.5 then
+    Result := Trunc(Value) + 1
+  else
+    Result := Round(Value);
 end;
 
 

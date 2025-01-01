@@ -20,7 +20,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="2"/>
+      <BuildNr Value="4"/>
       <Language Value="0415"/>
       <StringTable Comments="aktualizacje https://github.com/KonradCode/L4Kalkulator/releases" CompanyName="KonradCode" ProductName="L4 Kalkulator" ProductVersion="1.0.0"/>
     </VersionInfo>
@@ -134,6 +134,15 @@
         <Filename Value="l4.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="L4"/>
+      </Unit>
+      <Unit>
+        <Filename Value="testrunner.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestRunner"/>
+      </Unit>
+      <Unit>
+        <Filename Value="wersja.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>

@@ -1,4 +1,5 @@
 Program do wyliczenia wypłaty z uwzględnieniem L4
 
-![image](https://github.com/user-attachments/assets/f10002e9-f4df-497b-9875-a8f2841a7f4f)
+![image](https://github.com/user-attachments/assets/98105334-36e7-451a-ae00-c2917ec2dfa1)
+
 

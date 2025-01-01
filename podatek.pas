@@ -417,7 +417,7 @@ begin
 
 
     kwotaNaleznosci := ZaokraglijPodatek((podstawaOpodatkowania * pierwszyProgProcent) /
-      GROSZE - kwotaWolna) ;
+      GROSZE ) ;
 
 
   // Podatek nie może być ujemny
@@ -456,7 +456,7 @@ begin
 
 
     kwotaNaleznosci := ZaokraglijPodatek((podstawaOpodatkowania * drugiProgProcent) /
-      GROSZE - kwotaWolna);
+      GROSZE );
 
 
   // Podatek nie może być ujemny

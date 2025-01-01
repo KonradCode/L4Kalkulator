@@ -92,6 +92,7 @@ begin
 
     l4dzien := (APensjaBrutto * WSPOLCZYNNIK_POTRACENIA_PENSJI) / PRZELICZNIK_DZIEN;
   l4 := AdniL4 * l4dzien;
+  //Result := TPodatek.ZaokraglijPodatek(l4);
   l4 := (l4 / 10000);// zaokrąglenie do groszy  do  sprawdzenia
   Result := l4 * 10000;
 end;
@@ -112,6 +113,7 @@ begin
 
     l4dzien := (ADodtek * WSPOLCZYNNIK_POTRACENIA_DODATKU) / PRZELICZNIK_DZIEN;
   l4 := AdniL4 * l4dzien;
+  //Result := TPodatek.ZaokraglijPodatek(l4);
   l4 := (l4 / 10000);// zaokrąglenie do groszy  do sprawdzenia
   Result := l4 * 10000;
 end;
@@ -139,6 +141,8 @@ begin
 
     l4dzien := (APensjaBrutto * WSPOLCZYNNIK_POTRACENIA_PENSJI) / PRZELICZNIK_DZIEN;
   l4 := AdniL4 * l4dzien;
+   //Result := TPodatek.ZaokraglijPodatek(l4);
+
   l4 := (l4 / 10000);// zaokrąglenie do groszy  do  sprawdzenia
   Result := l4 * 10000;
 end;
@@ -159,6 +163,7 @@ begin
 
     l4dzien := (ADodtek * WSPOLCZYNNIK_POTRACENIA_DODATKU) / PRZELICZNIK_DZIEN;
   l4 := AdniL4 * l4dzien;
+   //Result := TPodatek.ZaokraglijPodatek(l4);
   l4 := (l4 / 10000);// zaokrąglenie do groszy  do sprawdzenia
   Result := l4 * 10000;
 end;

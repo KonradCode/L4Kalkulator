@@ -211,8 +211,8 @@ object Form1: TForm1
       Left = 24
       Height = 20
       Top = 33
-      Width = 232
-      Caption = 'Dodatek motywacyjny (25+) brutto'
+      Width = 147
+      Caption = 'Dodatek motywacyjny'
       ParentColor = False
       ParentFont = False
     end

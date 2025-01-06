@@ -44,7 +44,7 @@ type
     procedure EditL4DniExit(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure PustyStringNaZero(Sender: TObject);
-    procedure StatusBar1Click(Sender: TObject);
+    procedure StatusBar1DblClick(Sender: TObject);
     procedure WyczyscWszystkiePola;
   private
     const
@@ -82,10 +82,9 @@ begin
   end;
 end;
 
-procedure TForm1.StatusBar1Click(Sender: TObject);
-
+procedure TForm1.StatusBar1DblClick(Sender: TObject);
 begin
- ShellExecute(0, 'open', PChar(URL), nil, nil, 1);  //1 - SW_NORMAL
+   ShellExecute(0, 'open', PChar(URL), nil, nil, 1);  //1 - SW_NORMAL
 end;
 
 procedure TForm1.WyczyscWszystkiePola;
@@ -180,7 +179,7 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-   StatusBar1.Panels[1].Text:='Wersja programu: ' + TAppVersion.GetVersion;
+   StatusBar1.Panels[0].Text:='Wersja programu: ' + TAppVersion.GetVersion;
 end;
 
 end.

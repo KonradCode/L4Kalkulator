@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="L4Symulator"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="32" Y="17"/>
+        <CursorPos X="33" Y="16"/>
         <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit>
@@ -22,8 +22,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="OknoGlowne"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="132"/>
-        <CursorPos X="39" Y="151"/>
+        <TopLine Value="85"/>
+        <CursorPos X="72" Y="87"/>
         <UsageCount Value="44"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -32,8 +32,8 @@
         <Filename Value="podatek.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="414"/>
-        <CursorPos Y="427"/>
+        <TopLine Value="7"/>
+        <CursorPos Y="73"/>
         <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit>
@@ -42,14 +42,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="L4"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="21"/>
+        <TopLine Value="146"/>
         <CursorPos X="49" Y="89"/>
         <UsageCount Value="42"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="testrunner.pas"/>
-        <IsPartOfProject Value="True"/>
         <UnitName Value="TestRunner"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="23" Y="9"/>
@@ -109,18 +108,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="wersja.pas"/>
-        <Caret Line="39" Column="7" TopLine="26"/>
-      </Position>
-      <Position>
-        <Filename Value="wersja.pas"/>
-        <Caret Line="77" Column="41" TopLine="54"/>
-      </Position>
-      <Position>
-        <Filename Value="oknoglowne.pas"/>
-        <Caret Line="64" Column="33" TopLine="40"/>
-      </Position>
       <Position>
         <Filename Value="oknoglowne.pas"/>
         <Caret Line="91" Column="18" TopLine="88"/>
@@ -228,6 +215,18 @@
       <Position>
         <Filename Value="podatek.pas"/>
         <Caret Line="459" Column="14" TopLine="441"/>
+      </Position>
+      <Position>
+        <Filename Value="oknoglowne.pas"/>
+        <Caret Line="151" Column="39" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="oknoglowne.pas"/>
+        <Caret Line="180" Column="24" TopLine="160"/>
+      </Position>
+      <Position>
+        <Filename Value="oknoglowne.pas"/>
+        <Caret Line="89" TopLine="86"/>
       </Position>
     </JumpHistory>
     <RunParams>

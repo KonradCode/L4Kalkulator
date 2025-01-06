@@ -67,23 +67,9 @@ type
 
 
 
-// funkcje pomocnicze
-function RoundTax(Value: double): integer;
 
 
 implementation
-
-
-
-function RoundTax(Value: double): integer; //zaokrągla zgodnie z regułą podatkową
-begin
-  if Frac(Value) = 0.5 then
-    Result := Trunc(Value) + 1
-  else
-    Result := Round(Value);
-end;
-
-
 
 
 { TPodatek }

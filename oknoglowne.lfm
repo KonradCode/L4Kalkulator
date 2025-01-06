@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 452
+  Left = 538
   Height = 426
-  Top = 335
+  Top = 318
   Width = 691
   Caption = 'L4 Kalkulator '
   ClientHeight = 426
@@ -298,17 +298,16 @@ object Form1: TForm1
   object StatusBar1: TStatusBar
     Left = 0
     Height = 29
+    Hint = 'Podwójne klikniecie - aktualna wersja'
     Top = 397
     Width = 691
     Panels = <    
       item
-        Text = 'Aktualizacje: https://github.com/KonradCode/L4Kalkulator/releases'
         Width = 500
-      end    
-      item
-        Width = 50
       end>
+    ParentShowHint = False
     SimplePanel = False
-    OnClick = StatusBar1Click
+    ShowHint = True
+    OnDblClick = StatusBar1DblClick
   end
 end
